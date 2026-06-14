@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   OpenPath design system — dark "aurora" navy (StuImpact prototype language).
+   Tokens are exposed as Tailwind utilities (bg-surface, text-ink, text-muted,
+   bg-primary, rounded-pill, shadow-card, ...). Per-workspace theming overrides
+   --color-primary / --color-accent / --color-accent-2 / --font-display /
+   --radius-card / --shape-opacity on the workspace wrapper (see lib/theme.ts).
+   Token NAMES are intentionally stable so the whole app re-skins from here.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Surfaces & text */
+  --color-background: #171933; /* app canvas (navy) */
+  --color-bgdeep: #0f1126; /* deepest panels / footers */
+  --color-surface: #1f2147; /* cards / panels */
+  --color-cream: #272a55; /* elevated fill / subtle hover (name kept for compat) */
+  --color-ink: #f5f6ff; /* primary text (near-white) */
+  --color-muted: #9aa0c9; /* secondary text */
+  --color-faint: #6c6f9b; /* tertiary text */
+  --color-line: rgba(255, 255, 255, 0.09); /* hairline borders */
+
+  /* Brand accents — primary/accent/accent-2 are workspace-overridable */
+  --color-primary: #5b6cff; /* indigo */
+  --color-primary-ink: #ffffff;
+  --color-accent: #ff5fa2; /* pink */
+  --color-accent-2: #ff8a4c; /* orange */
+  --color-pink: #ff5fa2;
+  --color-orange: #ff8a4c;
+  --color-teal: #39c9c1;
+  --color-yellow: #f4c542;
+  --color-green: #5ec46a;
+  --color-purple: #a06bff;
+
+  /* Typography */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui,
+    sans-serif;
+
+  /* Radii */
+  --radius-pill: 9999px;
+  --radius-card: 16px; /* overridden by workspace cornerStyle */
+
+  /* Shadows (tuned for dark) */
+  --shadow-soft: 0 12px 30px -14px rgba(0, 0, 0, 0.6);
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 26px 60px -34px rgba(0, 0, 0, 0.75);
+  --shadow-glow: 0 16px 44px -12px rgba(91, 108, 255, 0.55);
+}
+
+:root {
+  --gradient-hero: linear-gradient(95deg, var(--color-accent), var(--color-accent-2));
+  --gradient-indigo-teal: linear-gradient(120deg, var(--color-primary), var(--color-teal));
+  --gradient-purple-indigo: linear-gradient(120deg, var(--color-purple), var(--color-primary));
+  --gradient-soft: radial-gradient(
+      900px 520px at 6% -4%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 620px at 102% 0%,
+      color-mix(in srgb, var(--color-teal) 16%, transparent),
+      transparent 60%
+    );
+  --shape-opacity: 1; /* scaled by workspace shapeIntensity */
+  --workspace-card-padding: 1.1rem;
+  --workspace-shell-width: 1440px;
+  color-scheme: dark;
+}
+
+:root[data-theme-mode="light"] {
+  --color-background: #f5f7fc;
+  --color-bgdeep: #e8edf8;
+  --color-surface: #ffffff;
+  --color-cream: #eef2ff;
+  --color-ink: #10182b;
+  --color-muted: #5f6b8f;
+  --color-faint: #8290b0;
+  --color-line: rgba(16, 24, 43, 0.1);
+  --shadow-soft: 0 12px 30px -14px rgba(25, 33, 56, 0.16);
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 20px 40px -24px rgba(25, 33, 56, 0.18);
+  --shadow-glow: 0 16px 44px -12px rgba(91, 108, 255, 0.26);
+  --gradient-soft: radial-gradient(
+      900px 520px at 6% -4%,
+      color-mix(in srgb, var(--color-accent) 10%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 620px at 102% 0%,
+      color-mix(in srgb, var(--color-teal) 10%, transparent),
+      transparent 60%
+    );
+  color-scheme: light;
+}
+
+:root[data-theme-mode="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html,
+body {
+  background-color: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 36%, transparent);
+}
+
+/* --- helper classes (always emitted; not purged) --- */
+.text-gradient {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.bg-gradient-hero {
+  background-image: var(--gradient-hero);
+}
+.bg-gradient-indigo-teal {
+  background-image: var(--gradient-indigo-teal);
+}
+.bg-gradient-purple-indigo {
+  background-image: var(--gradient-purple-indigo);
+}
+.bg-soft {
+  background-image: var(--gradient-soft);
+}
+
+/* Frosted panel */
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Decorative outline ring */
+.deco-ring {
+  position: absolute;
+  border-radius: 9999px;
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@keyframes drift-x {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(18px, -14px, 0) scale(1.02); }
+  66% { transform: translate3d(-10px, 12px, 0) scale(0.98); }
+}
+.animate-drift-x {
+  animation: drift-x 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes drift-reverse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-16px, 12px, 0) scale(1.03); }
+  66% { transform: translate3d(12px, -10px, 0) scale(0.99); }
+}
+.animate-drift-reverse {
+  animation: drift-reverse 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes orbit-slow {
+  0% { transform: rotate(0deg) translateX(0) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(0) rotate(-360deg); }
+}
+.animate-orbit-slow {
+  animation: orbit-slow 36s linear infinite;
+  will-change: transform;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-rise {
+  animation: rise 0.5s ease-out both;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+  aside,
+  header,
+  button {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+}
